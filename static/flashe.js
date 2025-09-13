@@ -560,28 +560,30 @@ function updateCostDisplay(selectedFlashTypeId, quantityNum, totalPriceBeforeDis
     document.getElementById('total-cost').textContent = `${totalCost.toFixed(2)} ج.م`;
 }
 
-// Countdown Timer
+// Countdown Timer - يعمل من تاريخ ووقت ثابت عالمي (Server-Side Logic)
 function initCountdownTimer() {
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
 
-    // Set the end date for the countdown (7 days from now)
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() + 7);
+    // ⚠️ 👇 التاريخ الثابت للعرض: 11 سبتمبر 2025 الساعة 7:00 صباحًا بتوقيت القاهرة (UTC+2)
+    // يُحوّل إلى UTC: 11 سبتمبر 2025 الساعة 5:00 صباحًا
+    const startDate = new Date('2025-09-11T05:00:00Z');
+
+    const durationMs = 7 * 24 * 60 * 60 * 1000; // 7 أيام بالمللي ثانية
+    const endDate = new Date(startDate.getTime() + durationMs); // تاريخ الانتهاء = البداية + 7 أيام
 
     const updateCountdown = () => {
-        const now = new Date().getTime();
-        const distance = endDate.getTime() - now;
+        const now = new Date(); // وقت المستخدم الحالي (يُحول تلقائيًا لـ UTC عند المقارنة)
+        const distance = endDate.getTime() - now.getTime();
 
-        if (distance < 0) {
-            // If the countdown is over, display "Offer Ended"
+        if (distance <= 0) {
+            // العرض انتهى
             if (daysElement) daysElement.textContent = "00";
             if (hoursElement) hoursElement.textContent = "00";
             if (minutesElement) minutesElement.textContent = "00";
             if (secondsElement) secondsElement.textContent = "00";
-            
             const countdownContainer = document.querySelector('.countdown-timer p');
             if (countdownContainer) {
                 countdownContainer.textContent = "انتهى العرض!";
@@ -601,9 +603,9 @@ function initCountdownTimer() {
         if (secondsElement) secondsElement.textContent = String(seconds).padStart(2, '0');
     };
 
-    // Update the countdown every 1 second
+    // التحديث كل ثانية
     const countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown(); // Initial call to display immediately
+    updateCountdown(); // تحديث فوري عند تحميل الصفحة
 }
 
 
