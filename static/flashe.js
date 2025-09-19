@@ -560,36 +560,27 @@ function updateCostDisplay(selectedFlashTypeId, quantityNum, totalPriceBeforeDis
     document.getElementById('total-cost').textContent = `${totalCost.toFixed(2)} ج.م`;
 }
 
-// Countdown Timer - يعمل من تاريخ ووقت ثابت عالمي (Server-Side Logic)
+// Countdown Timer - يعمل بشكل دوري كل 7 أيام
 function initCountdownTimer() {
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
 
-    // ⚠️ 👇 التاريخ الثابت للعرض: 11 سبتمبر 2025 الساعة 7:00 صباحًا بتوقيت القاهرة (UTC+2)
-    // يُحوّل إلى UTC: 11 سبتمبر 2025 الساعة 5:00 صباحًا
-    const startDate = new Date('2025-09-11T05:00:00Z');
+    // ⚠️ 👇 مدة العرض: 7 أيام بالمللي ثانية
+    const durationMs = 7 * 24 * 60 * 60 * 1000;
 
-    const durationMs = 7 * 24 * 60 * 60 * 1000; // 7 أيام بالمللي ثانية
-    const endDate = new Date(startDate.getTime() + durationMs); // تاريخ الانتهاء = البداية + 7 أيام
+    // نحسب أول تاريخ انتهاء: الآن + 7 أيام
+    let endDate = new Date(Date.now() + durationMs);
 
     const updateCountdown = () => {
-        const now = new Date(); // وقت المستخدم الحالي (يُحول تلقائيًا لـ UTC عند المقارنة)
-        const distance = endDate.getTime() - now.getTime();
+        const now = new Date();
+        let distance = endDate.getTime() - now.getTime();
 
+        // إذا انتهى الوقت، نبدأ دورة جديدة!
         if (distance <= 0) {
-            // العرض انتهى
-            if (daysElement) daysElement.textContent = "00";
-            if (hoursElement) hoursElement.textContent = "00";
-            if (minutesElement) minutesElement.textContent = "00";
-            if (secondsElement) secondsElement.textContent = "00";
-            const countdownContainer = document.querySelector('.countdown-timer p');
-            if (countdownContainer) {
-                countdownContainer.textContent = "انتهى العرض!";
-            }
-            clearInterval(countdownInterval);
-            return;
+            endDate = new Date(now.getTime() + durationMs); // ← هنا السحر! نضيف 7 أيام جديدة
+            distance = endDate.getTime() - now.getTime();   // ← نعيد حساب المسافة للدورة الجديدة
         }
 
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -604,10 +595,9 @@ function initCountdownTimer() {
     };
 
     // التحديث كل ثانية
-    const countdownInterval = setInterval(updateCountdown, 1000);
+    setInterval(updateCountdown, 1000);
     updateCountdown(); // تحديث فوري عند تحميل الصفحة
 }
-
 
 // Initialize scroll animations
 function initScrollAnimations() {
