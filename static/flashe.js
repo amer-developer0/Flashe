@@ -560,27 +560,34 @@ function updateCostDisplay(selectedFlashTypeId, quantityNum, totalPriceBeforeDis
     document.getElementById('total-cost').textContent = `${totalCost.toFixed(2)} ج.م`;
 }
 
-// Countdown Timer - يعمل بشكل دوري كل 7 أيام
+// Countdown Timer - يبدأ من 12 ظهرًا بتوقيت القاهرة يوم 19 سبتمبر 2025، ويعيد البدء كل 7 أيام
 function initCountdownTimer() {
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
 
-    // ⚠️ 👇 مدة العرض: 7 أيام بالمللي ثانية
-    const durationMs = 7 * 24 * 60 * 60 * 1000;
+    // ⚠️ 👇 تاريخ ووقت البداية: 12 ظهرًا بتوقيت القاهرة يوم 19 سبتمبر 2025
+    // 12 PM Cairo = 10:00 AM UTC (لأن توقيت القاهرة UTC+2)
+    const startDate = new Date('2025-09-19T10:00:00Z'); // ← هذا هو التاريخ الثابت الأساسي
 
-    // نحسب أول تاريخ انتهاء: الآن + 7 أيام
-    let endDate = new Date(Date.now() + durationMs);
+    const durationMs = 7 * 24 * 60 * 60 * 1000; // 7 أيام بالمللي ثانية
 
     const updateCountdown = () => {
         const now = new Date();
-        let distance = endDate.getTime() - now.getTime();
+        const elapsedMs = now.getTime() - startDate.getTime(); // الوقت اللي فات من أول بداية
 
-        // إذا انتهى الوقت، نبدأ دورة جديدة!
-        if (distance <= 0) {
-            endDate = new Date(now.getTime() + durationMs); // ← هنا السحر! نضيف 7 أيام جديدة
-            distance = endDate.getTime() - now.getTime();   // ← نعيد حساب المسافة للدورة الجديدة
+        // عدد الدورات الكاملة اللي خلصت (كل دورة 7 أيام)
+        const completedCycles = Math.floor(elapsedMs / durationMs);
+
+        // تاريخ نهاية الدورة الحالية (آخر عرض بدأ)
+        const currentCycleEndDate = new Date(startDate.getTime() + (completedCycles + 1) * durationMs);
+
+        let distance = currentCycleEndDate.getTime() - now.getTime();
+
+        // لو فيه خطأ تقريبي صغير، نتأكد أن العداد مايروحش للسالب
+        if (distance < 0) {
+            distance = 0;
         }
 
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -597,33 +604,6 @@ function initCountdownTimer() {
     // التحديث كل ثانية
     setInterval(updateCountdown, 1000);
     updateCountdown(); // تحديث فوري عند تحميل الصفحة
-}
-
-// Initialize scroll animations
-function initScrollAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.hero-content, .features-grid .feature-item, .testimonial, .order-form-container').forEach(el => {
-        observer.observe(el);
-    });
-
-    document.querySelectorAll('.features-grid .feature-item').forEach((el, index) => {
-        el.classList.add(`delay-${index + 1}`);
-    });
-    document.querySelectorAll('.testimonial').forEach((el, index) => {
-        el.classList.add(`delay-${index + 1}`);
-    });
 }
 
 // Add smooth scrolling for anchor links
