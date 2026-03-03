@@ -11,6 +11,10 @@
     --shadow-color: rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
 }
+html {
+  scroll-behavior: smooth;
+}
+
 * {
     margin: 0;
     padding: 0;
