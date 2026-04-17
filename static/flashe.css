@@ -11,10 +11,6 @@
     --shadow-color: rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
 }
-html {
-  scroll-behavior: smooth;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -33,7 +29,8 @@ body {
     margin: 0 auto;
     padding: 0 15px;
 }
-/* Header Styles */
+
+/* Header */
 .header {
     background-color: rgba(26, 26, 46, 0.9);
     backdrop-filter: blur(10px);
@@ -87,6 +84,7 @@ body {
 .nav a:hover::after {
     width: 100%;
 }
+
 /* Hero Section */
 .hero {
     padding: 150px 0 80px;
@@ -126,98 +124,14 @@ body {
     color: var(--text-muted);
     animation: fadeInUp 1s ease 0.2s both;
 }
-
-/* Offer Section Styles */
-.offer-section {
-    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 40px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    animation: fadeInScale 1s ease forwards;
-}
-
-.offer-text {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.offer-text p {
-    margin: 0;
-    padding: 0;
-    font-size: 1.3rem; /* Override hero p style */
-}
-
-.highlight-discount {
-    color: #ffeaa7; /* Light yellow for discount */
-    font-weight: 700;
-    text-shadow: 0 0 5px rgba(0,0,0,0.3);
-}
-
-.highlight-shipping {
-    color: #b8e994; /* Light green for free shipping */
-    font-weight: 700;
-    text-shadow: 0 0 5px rgba(0,0,0,0.3);
-}
-
-.countdown-timer {
-    font-size: 1.1rem;
-    color: white;
-    font-weight: 500;
-    text-align: center;
-}
-
-.countdown-values {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.countdown-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(0,0,0,0.2);
-    padding: 8px 12px;
-    border-radius: 8px;
-    min-width: 70px;
-}
-
-.countdown-item span {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #ffeaa7;
-    line-height: 1;
-    margin-bottom: 5px;
-}
-
-@keyframes fadeInScale {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-
 .cta-buttons {
     display: flex;
     justify-content: center;
     gap: 20px;
     animation: fadeInUp 1s ease 0.4s both;
 }
+
+/* Buttons */
 .btn {
     padding: 12px 30px;
     border-radius: 30px;
@@ -249,7 +163,8 @@ body {
     color: white;
     transform: translateY(-3px);
 }
-/* Carousel Styles */
+
+/* Carousel */
 .carousel-container {
     position: relative;
     max-width: 600px;
@@ -324,6 +239,7 @@ body {
     background: #ff76a8;
     transform: translateX(-50%) translateY(-3px);
 }
+
 /* Features Section */
 .features {
     padding: 100px 0;
@@ -368,6 +284,7 @@ body {
 .feature-item p {
     color: var(--text-muted);
 }
+
 /* Testimonials Section */
 .testimonials {
     padding: 100px 0;
@@ -416,6 +333,7 @@ body {
     color: var(--accent-color);
     text-align: right;
 }
+
 /* Order Section */
 .order-section {
     padding: 100px 0;
@@ -471,6 +389,8 @@ body {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
 }
+
+/* Governorate Dropdown */
 .governorate-dropdown {
     position: relative;
 }
@@ -490,7 +410,7 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
 }
 .governorate-list {
-    display: none; /* Hidden by default */
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -505,7 +425,7 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 .governorate-list.active {
-    display: block; /* Show when active */
+    display: block;
 }
 #governorate-search {
     width: 100%;
@@ -518,47 +438,40 @@ body {
     margin-bottom: 10px;
     box-sizing: border-box;
 }
-
-/* NEW: Styles for the UL list of governorates */
 .governorate-options-list {
-    list-style: none; /* Remove bullet points */
+    list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 200px; /* Limit height and make it scrollable */
+    max-height: 200px;
     overflow-y: auto;
-    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Separator from search input */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .governorate-options-list li {
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    color: var(--text-light); /* Ensure text is visible */
-    background-color: #1a1a2e; /* Match the background of the old select options */
+    color: var(--text-light);
+    background-color: #1a1a2e;
 }
-
 .governorate-options-list li:hover {
-    background-color: var(--primary-color); /* Highlight on hover */
-    color: white; /* Ensure text is visible on hover */
+    background-color: var(--primary-color);
+    color: white;
 }
-
-
 .delivery-note {
     margin-top: 10px;
     font-size: 0.9rem;
     text-align: center;
 }
-
 .delivery-note a {
     color: var(--text-muted);
     text-decoration: underline;
     transition: var(--transition);
 }
-
 .delivery-note a:hover {
     color: var(--accent-color);
 }
 
+/* Cost Breakdown */
 .cost-breakdown {
     background: rgba(108, 92, 231, 0.1);
     border-radius: 10px;
@@ -602,7 +515,8 @@ body {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
 }
-/* Footer Styles */
+
+/* Footer */
 .footer {
     background-color: #0f0f23;
     padding: 60px 0 30px;
@@ -626,8 +540,7 @@ body {
     color: var(--text-muted);
     line-height: 1.7;
 }
-.footer-links h4,
-.footer-contact h4 {
+.footer-links h4 {
     font-size: 1.3rem;
     margin-bottom: 20px;
     color: var(--accent-color);
@@ -646,18 +559,6 @@ body {
 .footer-links a:hover {
     color: var(--accent-color);
 }
-.footer-contact p {
-    margin-bottom: 10px;
-    color: var(--text-muted);
-}
-.footer-contact a {
-    color: var(--accent-color);
-    text-decoration: none;
-    transition: var(--transition);
-}
-.footer-contact a:hover {
-    text-decoration: underline;
-}
 .footer-bottom {
     text-align: center;
     padding-top: 30px;
@@ -665,7 +566,8 @@ body {
     color: var(--text-muted);
     font-size: 0.9rem;
 }
-/* Modal Styles */
+
+/* Modals */
 .modal {
     display: none;
     position: fixed;
@@ -750,7 +652,6 @@ body {
     color: var(--text-muted);
     font-weight: 600;
 }
-
 #unavailable-governorates-list {
     list-style: none;
     padding: 0;
@@ -758,93 +659,47 @@ body {
     font-size: 1.1rem;
     color: var(--text-light);
 }
-
 #unavailable-governorates-list li {
     margin-bottom: 8px;
 }
 
 /* Animations */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 @keyframes slideInDown {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
-/* Responsive Design */
+
+/* Animation Helpers */
+.fade-in { animation: fadeInUp 0.8s ease forwards; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* Responsive */
 @media (max-width: 992px) {
-    .hero {
-        padding: 180px 0 60px;
-    }
-    .hero h2 {
-        font-size: 2.5rem;
-    }
-    .carousel {
-        height: 350px;
-    }
-    .carousel-item.center {
-        width: 300px;
-        height: 300px;
-    }
+    .hero { padding: 180px 0 60px; }
+    .hero h2 { font-size: 2.5rem; }
+    .carousel { height: 350px; }
+    .carousel-item.center { width: 300px; height: 300px; }
     .carousel-item.left,
-    .carousel-item.right {
-        width: 220px;
-        height: 220px;
-    }
-    .carousel-item.back {
-        width: 180px;
-        height: 180px;
-    }
-    .offer-section {
-        padding: 15px;
-    }
-    .offer-text {
-        font-size: 1.1rem;
-    }
-    .offer-text p {
-        font-size: 1.1rem;
-    }
-    .countdown-timer {
-        font-size: 1rem;
-    }
-    .countdown-item span {
-        font-size: 1.5rem;
-    }
+    .carousel-item.right { width: 220px; height: 220px; }
+    .carousel-item.back { width: 180px; height: 180px; }
 }
 @media (max-width: 768px) {
-    .header .container {
-        flex-direction: column;
-        gap: 15px;
-    }
-    .nav ul {
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .hero-content {
-        text-align: center;
-        margin: 0 auto 40px;
-    }
-    .cta-buttons {
-        justify-content: center;
-    }
+    .header .container { flex-direction: column; gap: 15px; }
+    .nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
+    .hero-content { text-align: center; margin: 0 auto 40px; }
+    .cta-buttons { justify-content: center; }
     .btn-more {
         position: relative;
         bottom: auto;
@@ -855,68 +710,24 @@ body {
         width: fit-content;
     }
     .features-grid,
-    .testimonials-container {
-        grid-template-columns: 1fr;
-    }
-    .order-form-container {
-        padding: 30px 20px;
-    }
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    .modal-images-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-    .form-group label {
-        font-size: 0.95rem;
-    }
+    .testimonials-container { grid-template-columns: 1fr; }
+    .order-form-container { padding: 30px 20px; }
+    .footer-content { grid-template-columns: 1fr; gap: 30px; }
+    .modal-images-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .form-group label { font-size: 0.95rem; }
     .form-group input,
     .form-group select,
     .form-group textarea,
-    .governorate-toggle {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-    }
-    .cost-breakdown .cost-item span {
-        font-size: 0.9rem;
-    }
-    .cost-breakdown .total-cost {
-        font-size: 1.1rem !important;
-    }
-    .btn-order {
-        padding: 12px;
-        font-size: 1rem;
-    }
-    .offer-section {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .countdown-values {
-        gap: 10px;
-    }
-    .countdown-item {
-        min-width: 60px;
-        padding: 5px 8px;
-    }
-    .countdown-item span {
-        font-size: 1.3rem;
-    }
+    .governorate-toggle { padding: 10px 12px; font-size: 0.9rem; }
+    .cost-breakdown .cost-item span { font-size: 0.9rem; }
+    .cost-breakdown .total-cost { font-size: 1.1rem !important; }
+    .btn-order { padding: 12px; font-size: 1rem; }
 }
 @media (max-width: 576px) {
-    .hero h2 {
-        font-size: 2rem;
-    }
-    .hero p {
-        font-size: 1rem;
-    }
-    .carousel {
-        height: 300px;
-    }
-    .carousel-item.center {
-        width: 250px;
-        height: 250px;
-    }
+    .hero h2 { font-size: 2rem; }
+    .hero p { font-size: 1rem; }
+    .carousel { height: 300px; }
+    .carousel-item.center { width: 250px; height: 250px; }
     .carousel-item.left,
     .carousel-item.right {
         width: 180px;
@@ -924,58 +735,12 @@ body {
         transform: translate(-50%, -50%) scale(0.8) translateX(0) !important;
         opacity: 0.6;
     }
-    .carousel-item.back {
-        display: none;
-    }
-    .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
+    .carousel-item.back { display: none; }
+    .btn { padding: 10px 20px; font-size: 0.9rem; }
     .features h2,
     .testimonials h2,
-    .order-section h2 {
-        font-size: 2rem;
-    }
-    .modal-content {
-        margin: 10% auto;
-        padding: 20px;
-    }
-    .modal h3 {
-        font-size: 1.5rem;
-    }
-    .cost-breakdown {
-        padding: 15px;
-    }
-    .offer-text {
-        font-size: 1rem;
-    }
-    .offer-text p {
-        font-size: 1rem;
-    }
-    .countdown-item {
-        min-width: 50px;
-        padding: 3px 5px;
-    }
-    .countdown-item span {
-        font-size: 1.1rem;
-    }
-}
-/* Animation for elements as they come into view */
-.fade-in {
-    animation: fadeInUp 0.8s ease forwards;
-}
-.delay-1 {
-    animation-delay: 0.1s;
-}
-.delay-2 {
-    animation-delay: 0.2s;
-}
-.delay-3 {
-    animation-delay: 0.3s;
-}
-.delay-4 {
-    animation-delay: 0.4s;
-}
-.delay-5 {
-    animation-delay: 0.5s;
+    .order-section h2 { font-size: 2rem; }
+    .modal-content { margin: 10% auto; padding: 20px; }
+    .modal h3 { font-size: 1.5rem; }
+    .cost-breakdown { padding: 15px; }
 }

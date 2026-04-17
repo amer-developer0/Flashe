@@ -1,117 +1,81 @@
 // flashe.js
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize variables
-    let productData = {}; // productData is defined here
+    let productData = {};
 
-    // Load product data first
     loadProductData();
-
-    // Initialize form (these can be initialized before productData is fully loaded,
-    // as their event listeners will trigger updatePrice later)
     initForm();
-    // Initialize modal
     initModal();
-    // Initialize governorate search and selection
     initGovernorateSearch();
-    // Add scroll animations
     initScrollAnimations();
-    // Add smooth scrolling for anchor links
     initSmoothScrolling();
-    // Initialize countdown timer (can run independently)
-    initCountdownTimer();
 });
 
 // Load product data from JSON
 function loadProductData() {
     fetch('data/flashe.json')
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
         .then(data => {
-            // Set all flash drive prices to a unified price (e.g., 515 before discount)
             const unifiedPrice = 515;
-            productData = { // productData is assigned here
+            productData = {
                 ...data,
                 flashTypes: data.flashTypes.map(type => ({ ...type, price: unifiedPrice })),
             };
             populateFlashTypes();
-            populateGovernoratesList(); // <<< Changed function name
-            updatePrice(); // <<< IMPORTANT: Call updatePrice AFTER productData is loaded
+            populateGovernoratesList();
+            updatePrice();
         })
         .catch(error => {
             console.error('Error loading product data:', error);
-            // Set default values if file not found
             const unifiedPrice = 515;
-            productData = { // productData is assigned here even on error
+            productData = {
                 flashTypes: [
                     { id: "basic", name: "فلاشة الحاسب الالي والبرمجة للأطفال", price: unifiedPrice },
                     { id: "foundation", name: "فلاشة تأسيس الطفل", price: unifiedPrice },
                     { id: "drawing", name: "فلاشة تعليم الرسم للأطفال", price: unifiedPrice },
                     { id: "muslim_child", name: "فلاشة الطفل المسلم 3*1", price: unifiedPrice },
                     { id: "english", name: "فلاشة تعليم الإنجليزية للأطفال", price: unifiedPrice },
-                    { id: "prayer", "name": "فلاشة تعليم الصلاه للأطفال", price: unifiedPrice },
-                    { id: "prophets", "name": "فلاشة قصص الانبياء", price: unifiedPrice },
-                    { id: "islamic_cartoon", "name": "فلاشة مسلسلات الكرتون الاسلامي", price: unifiedPrice },
-                    { id: "dubbed_cartoon", "name": "فلاشة كرتون الاطفال المدبلج", price: unifiedPrice },
-                    { id: "golden_age_cartoon", "name": "فلاشة كرتون الزمن الجميل", price: unifiedPrice },
-                    { id: "family_cartoon", "name": "فلاشة كرتون العيلة", price: unifiedPrice },
-                    { id: "islamic_cartoon2", "name": "فلاشة الكرتون الاسلامي", price: unifiedPrice },
-                    { id: "family_cartoon2", "name": "فلاشة كرتون كل الاسرة (توم و جيري)", price: unifiedPrice },
-                    { id: "light_games", "name": "فلاشة العاب الكمبيوتر الخفيفه", price: unifiedPrice }
+                    { id: "prayer", name: "فلاشة تعليم الصلاه للأطفال", price: unifiedPrice },
+                    { id: "prophets", name: "فلاشة قصص الانبياء", price: unifiedPrice },
+                    { id: "islamic_cartoon", name: "فلاشة مسلسلات الكرتون الاسلامي", price: unifiedPrice },
+                    { id: "dubbed_cartoon", name: "فلاشة كرتون الاطفال المدبلج", price: unifiedPrice },
+                    { id: "golden_age_cartoon", name: "فلاشة كرتون الزمن الجميل", price: unifiedPrice },
+                    { id: "family_cartoon", name: "فلاشة كرتون العيلة", price: unifiedPrice },
+                    { id: "islamic_cartoon2", name: "فلاشة الكرتون الاسلامي", price: unifiedPrice },
+                    { id: "family_cartoon2", name: "فلاشة كرتون كل الاسرة (توم و جيري)", price: unifiedPrice },
+                    { id: "light_games", name: "فلاشة العاب الكمبيوتر الخفيفه", price: unifiedPrice }
                 ],
-                discount: 0.25, // 25% discount
+                discount: 0.25,
                 whatsapp: "201117635075",
                 shipping: {
-                    "القاهرة": 70,
-                    "الجيزة": 70,
-                    "القليوبية": 70,
-                    "الإسكندرية": 70,
-                    "البحيرة": 70,
-                    "كفر الشيخ": 70,
-                    "الدقهلية": 70,
-                    "دمياط": 70,
-                    "الغربية": 70,
-                    "المنوفيه": 70,
-                    "الشرقية": 70,
-                    "بورسعيد": 70,
-                    "الإسماعيلية": 70,
-                    "السويس": 70,
-                    "مطروح": 95,
-                    "جنوب سيناء": 100,
-                    "بني سويف": 70,
-                    "الفيوم": 70,
-                    "المنيا": 70,
-                    "أسيوط": 70,
-                    "سوهاج": 70,
-                    "قنا": 70,
-                    "الأقصر": 70,
-                    "أسوان": 70,
+                    "القاهرة": 70, "الجيزة": 70, "القليوبية": 70, "الإسكندرية": 70,
+                    "البحيرة": 70, "كفر الشيخ": 70, "الدقهلية": 70, "دمياط": 70,
+                    "الغربية": 70, "المنوفيه": 70, "الشرقية": 70, "بورسعيد": 70,
+                    "الإسماعيلية": 70, "السويس": 70, "مطروح": 95, "جنوب سيناء": 100,
+                    "بني سويف": 70, "الفيوم": 70, "المنيا": 70, "أسيوط": 70,
+                    "سوهاج": 70, "قنا": 70, "الأقصر": 70, "أسوان": 70,
                     "البحر الاحمر": 95
                 },
-                freeShippingThreshold: 2, // Free shipping for 2 or more items
+                freeShippingThreshold: 2,
                 unavailableGovernorates: ["شمال سيناء", "الوادي الجديد"]
             };
             populateFlashTypes();
-            populateGovernoratesList(); // <<< Changed function name
-            updatePrice(); // <<< IMPORTANT: Call updatePrice AFTER productData is loaded
+            populateGovernoratesList();
+            updatePrice();
         })
         .finally(() => {
-            // Load images for carousel after product data (or default) is set
             loadImagesForCarousel();
         });
 }
 
-// Populate flash drive types in the form
+// Populate flash drive types
 function populateFlashTypes() {
     const flashTypeSelect = document.getElementById('flash-type');
-    // Clear existing options except the first one
     while (flashTypeSelect.options.length > 1) {
         flashTypeSelect.remove(1);
     }
-    // Add options from product data
     if (productData.flashTypes && productData.flashTypes.length > 0) {
         productData.flashTypes.forEach(type => {
             const option = document.createElement('option');
@@ -122,20 +86,18 @@ function populateFlashTypes() {
     }
 }
 
-// Populate governorates in the new UL list
-function populateGovernoratesList() { // <<< Renamed function
-    const governorateOptionsList = document.getElementById('governorate-options-list'); // <<< New element ID
-    governorateOptionsList.innerHTML = ''; // Clear existing items
+// Populate governorates list
+function populateGovernoratesList() {
+    const governorateOptionsList = document.getElementById('governorate-options-list');
+    governorateOptionsList.innerHTML = '';
 
-    const availableGovernorates = Object.keys(productData.shipping);
-    availableGovernorates.forEach(gov => {
-        const listItem = document.createElement('li'); // <<< Create LI element
+    Object.keys(productData.shipping).forEach(gov => {
+        const listItem = document.createElement('li');
         listItem.textContent = gov;
-        listItem.dataset.value = gov; // Store the value in a data attribute
+        listItem.dataset.value = gov;
         governorateOptionsList.appendChild(listItem);
     });
 
-    // Populate unavailable governorates modal (no change here)
     const unavailableList = document.getElementById('unavailable-governorates-list');
     unavailableList.innerHTML = '';
     if (productData.unavailableGovernorates) {
@@ -147,24 +109,22 @@ function populateGovernoratesList() { // <<< Renamed function
     }
 }
 
-// --- Carousel Logic ---
-let allCarouselImages = []; // Array to hold all image paths
-let carouselInterval; // Variable to hold the interval ID
+// Carousel Logic
+let allCarouselImages = [];
+let carouselInterval;
 
 function loadImagesForCarousel() {
     const carouselContainer = document.getElementById('main-carousel');
-    carouselContainer.innerHTML = ''; // Clear existing items
+    carouselContainer.innerHTML = '';
 
-    // Assuming images are flashe1.png to flashe14.png
     for (let i = 1; i <= 4; i++) {
         allCarouselImages.push(`assets/images/flashe${i}.png`);
     }
 
-    // Create carousel items dynamically
     allCarouselImages.forEach((src, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('carousel-item');
-        itemDiv.style.display = 'none'; 
+        itemDiv.style.display = 'none';
         const img = document.createElement('img');
         img.src = src;
         img.alt = `Flashe Product ${index + 1}`;
@@ -172,30 +132,23 @@ function loadImagesForCarousel() {
         carouselContainer.appendChild(itemDiv);
     });
 
-    initCarousel(); // Now initialize the carousel after images are loaded
+    initCarousel();
 }
 
 function initCarousel() {
     const carouselItems = document.querySelectorAll('#main-carousel .carousel-item');
-    if (carouselItems.length === 0) {
-        console.warn("No carousel items found to initialize.");
-        return;
-    }
+    if (carouselItems.length === 0) return;
 
-    let currentCenterIndex = 0; 
-    const visibleItemsCount = 4; 
+    let currentCenterIndex = 0;
 
     function updateCarouselPositions() {
         carouselItems.forEach((item, index) => {
             item.classList.remove('back', 'left', 'center', 'right');
-            item.style.display = 'none'; 
+            item.style.display = 'none';
 
             let relativeIndex = index - currentCenterIndex;
-            if (relativeIndex < -allCarouselImages.length / 2) { 
-                relativeIndex += allCarouselImages.length;
-            } else if (relativeIndex > allCarouselImages.length / 2) { 
-                relativeIndex -= allCarouselImages.length;
-            }
+            if (relativeIndex < -allCarouselImages.length / 2) relativeIndex += allCarouselImages.length;
+            else if (relativeIndex > allCarouselImages.length / 2) relativeIndex -= allCarouselImages.length;
 
             if (relativeIndex === 0) {
                 item.classList.add('center');
@@ -222,66 +175,39 @@ function initCarousel() {
     }
 
     updateCarouselPositions();
-    carouselInterval = setInterval(rotateCarousel, 1500); 
+    carouselInterval = setInterval(rotateCarousel, 1500);
 }
-
-// --- End Carousel Logic ---
 
 // Initialize modal
 function initModal() {
     const moreModal = document.getElementById('more-modal');
-    const btnMore = document.getElementById('more-btn'); 
+    const btnMore = document.getElementById('more-btn');
     const moreModalClose = moreModal.querySelector('.close-modal');
     const zoomModal = document.getElementById('image-zoom-modal');
-    const zoomModalClose = zoomModal.querySelector('.close-modal.zoom-close'); 
+    const zoomModalClose = zoomModal.querySelector('.close-modal.zoom-close');
     const zoomedImage = document.getElementById('zoomed-image');
     const deliveryUnavailableModal = document.getElementById('delivery-unavailable-modal');
     const deliveryUnavailableLink = document.getElementById('delivery-unavailable-link');
     const deliveryUnavailableClose = deliveryUnavailableModal.querySelector('.close-modal');
 
-    btnMore.onclick = function() { 
-        moreModal.style.display = "block"; 
-        document.body.style.overflow = "hidden"; 
-    }
+    btnMore.onclick = () => { moreModal.style.display = "block"; document.body.style.overflow = "hidden"; };
+    moreModalClose.onclick = () => { moreModal.style.display = "none"; document.body.style.overflow = "auto"; };
+    zoomModalClose.onclick = () => { zoomModal.style.display = "none"; document.body.style.overflow = "auto"; };
 
-    moreModalClose.onclick = function() {
-        moreModal.style.display = "none";
-        document.body.style.overflow = "auto";
-    }
-
-    zoomModalClose.onclick = function() {
-        zoomModal.style.display = "none";
-        document.body.style.overflow = "auto";
-    }
-
-    deliveryUnavailableLink.onclick = function(e) {
+    deliveryUnavailableLink.onclick = (e) => {
         e.preventDefault();
         deliveryUnavailableModal.style.display = "block";
         document.body.style.overflow = "hidden";
-    }
+    };
+    deliveryUnavailableClose.onclick = () => { deliveryUnavailableModal.style.display = "none"; document.body.style.overflow = "auto"; };
 
-    deliveryUnavailableClose.onclick = function() {
-        deliveryUnavailableModal.style.display = "none";
-        document.body.style.overflow = "auto";
-    }
+    window.onclick = (event) => {
+        if (event.target == moreModal) { moreModal.style.display = "none"; document.body.style.overflow = "auto"; }
+        if (event.target == zoomModal) { zoomModal.style.display = "none"; document.body.style.overflow = "auto"; }
+        if (event.target == deliveryUnavailableModal) { deliveryUnavailableModal.style.display = "none"; document.body.style.overflow = "auto"; }
+    };
 
-    window.onclick = function(event) {
-        if (event.target == moreModal) {
-            moreModal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-        if (event.target == zoomModal) {
-            zoomModal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-        if (event.target == deliveryUnavailableModal) {
-            deliveryUnavailableModal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-    }
-
-    const modalImages = document.querySelectorAll('#more-modal .modal-image'); 
-    modalImages.forEach(img => {
+    document.querySelectorAll('#more-modal .modal-image').forEach(img => {
         img.addEventListener('click', function() {
             zoomedImage.src = this.src;
             zoomModal.style.display = "block";
@@ -296,53 +222,44 @@ function initForm() {
     const flashType = document.getElementById('flash-type');
     const quantity = document.getElementById('quantity');
     const governorateInput = document.getElementById('governorate-input');
-    // const governorateSelect = document.getElementById('governorate'); // <<< REMOVED
     const governorateToggle = document.querySelector('.governorate-toggle');
     const governorateListDiv = document.querySelector('.governorate-list');
     const multipleTypesGroup = document.getElementById('multiple-types-group');
     const multipleTypesTextarea = document.getElementById('multiple-types');
-    const governorateOptionsList = document.getElementById('governorate-options-list'); // <<< NEW
+    const governorateOptionsList = document.getElementById('governorate-options-list');
 
     flashType.addEventListener('change', updatePrice);
+
     quantity.addEventListener('change', function() {
         const quantityNum = parseInt(this.value);
         if (quantityNum > 1) {
             multipleTypesGroup.style.display = 'block';
-            // Make multipleTypesTextarea required if flashType is not selected
-            if (!flashType.value) {
-                multipleTypesTextarea.setAttribute('required', 'required');
-            }
+            if (!flashType.value) multipleTypesTextarea.setAttribute('required', 'required');
         } else {
             multipleTypesGroup.style.display = 'none';
             multipleTypesTextarea.removeAttribute('required');
-            multipleTypesTextarea.value = ''; 
+            multipleTypesTextarea.value = '';
         }
-        updatePrice(); 
+        updatePrice();
     });
 
-    // Event listener for clicking on a governorate in the new UL list
-    governorateOptionsList.addEventListener('click', function(event) { // <<< NEW
+    governorateOptionsList.addEventListener('click', function(event) {
         if (event.target.tagName === 'LI') {
-            const selectedGovernorate = event.target.dataset.value; // Get value from data-value
-            governorateInput.value = selectedGovernorate; // Set the input field
-            governorateListDiv.classList.remove('active'); // Hide the dropdown
+            governorateInput.value = event.target.dataset.value;
+            governorateListDiv.classList.remove('active');
             updatePrice();
         }
     });
 
-    // Show dropdown immediately on toggle click
     governorateToggle.addEventListener('click', function() {
         governorateListDiv.classList.toggle('active');
         if (governorateListDiv.classList.contains('active')) {
             document.getElementById('governorate-search').focus();
-            // Scroll to top of the list when opened
             governorateOptionsList.scrollTop = 0;
         }
     });
 
-    // Hide dropdown if clicked outside
     document.addEventListener('click', function(event) {
-        // Check if the click was outside the governorate-dropdown container
         const governorateDropdownContainer = document.querySelector('.governorate-dropdown');
         if (!governorateDropdownContainer.contains(event.target) && event.target !== governorateInput) {
             governorateListDiv.classList.remove('active');
@@ -351,16 +268,14 @@ function initForm() {
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         const name = document.getElementById('name').value.trim();
         const flashTypeValue = flashType.value;
         const quantityValue = quantity.value;
         const phone = document.getElementById('phone').value.trim();
         const altPhone = document.getElementById('alt-phone').value.trim();
-        const governorate = governorateInput.value; // <<< Get value from the input field
+        const governorate = governorateInput.value;
         const address = document.getElementById('address').value.trim();
         const notes = document.getElementById('notes').value.trim();
         const multipleTypes = multipleTypesTextarea.value.trim();
@@ -368,14 +283,11 @@ function initForm() {
         let flashTypeName = '';
         if (productData.flashTypes) {
             const selectedType = productData.flashTypes.find(type => type.id === flashTypeValue);
-            if (selectedType) {
-                flashTypeName = selectedType.name;
-            }
+            if (selectedType) flashTypeName = selectedType.name;
         }
 
-        let orderDetails = '';
         const quantityNum = parseInt(quantityValue);
-
+        let orderDetails = '';
         if (quantityNum > 1 && multipleTypes) {
             orderDetails = multipleTypes;
         } else if (quantityNum > 1 && flashTypeName) {
@@ -386,38 +298,13 @@ function initForm() {
             orderDetails = 'لم يتم تحديد نوع الفلاشة/الفلاشات';
         }
 
-        let message = `مرحبًا، إسمي ${name}
+        let message = `مرحبًا، إسمي ${name}\n\n📦 الطلب:\n${orderDetails}\n\n📞 أرقام التواصل:\nرقم أساسي: ${phone}`;
+        if (altPhone) message += `\nرقم بديل: ${altPhone}`;
+        message += `\n\n📍 العنوان:\n${governorate} – ${address}`;
+        if (notes) message += `\n\n📝 ملاحظات:\n${notes}`;
+        message += `\n\n💰 إجمالي التكلفة:\n${document.getElementById('total-cost').textContent}`;
 
-📦 الطلب:
-${orderDetails}
-
-📞 أرقام التواصل:
-رقم أساسي: ${phone}`;
-        if (altPhone) {
-            message += `
-رقم بديل: ${altPhone}`;
-        }
-        message += `
-
-📍 العنوان:
-${governorate} – ${address}`;
-        if (notes) {
-            message += `
-
-📝 ملاحظات:
-${notes}`;
-        }
-
-        const totalCostElement = document.getElementById('total-cost');
-        message += `
-
-💰 إجمالي التكلفة:
-${totalCostElement.textContent}`;
-
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/${productData.whatsapp}?text=${encodedMessage}`;
-
-        window.open(whatsappUrl, '_blank');
+        window.open(`https://wa.me/${productData.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
     });
 }
 
@@ -426,76 +313,44 @@ function validateForm() {
     const flashType = document.getElementById('flash-type').value.trim();
     const quantity = document.getElementById('quantity').value.trim();
     const phone = document.getElementById('phone').value.trim();
-    const governorate = document.getElementById('governorate-input').value.trim(); // <<< Get value from the input field
+    const governorate = document.getElementById('governorate-input').value.trim();
     const address = document.getElementById('address').value.trim();
     const multipleTypesTextarea = document.getElementById('multiple-types').value.trim();
 
-    if (!name) {
-        alert('الاسم الكامل مطلوب.');
-        return false;
-    }
-    if (!quantity) {
-        alert('عدد القطع مطلوب.');
-        return false;
-    }
-    const quantityNum = parseInt(quantity);
-    
-    // Validation for flash type / multiple types
-    if (quantityNum === 1) {
-        if (!flashType) {
-            alert('نوع الفلاشة مطلوب عند طلب قطعة واحدة.');
-            return false;
-        }
-    } else if (quantityNum > 1) {
-        // If quantity > 1, either flashType or multipleTypesTextarea must be filled
-        if (!flashType && !multipleTypesTextarea) {
-            alert('يرجى تحديد نوع الفلاشة أو تخصيص الأنواع عند طلب أكثر من قطعة.');
-            return false;
-        }
-    }
+    if (!name) { alert('الاسم الكامل مطلوب.'); return false; }
+    if (!quantity) { alert('عدد القطع مطلوب.'); return false; }
 
-    if (!phone) {
-        alert('رقم الهاتف مطلوب.');
+    const quantityNum = parseInt(quantity);
+    if (quantityNum === 1 && !flashType) { alert('نوع الفلاشة مطلوب عند طلب قطعة واحدة.'); return false; }
+    if (quantityNum > 1 && !flashType && !multipleTypesTextarea) {
+        alert('يرجى تحديد نوع الفلاشة أو تخصيص الأنواع عند طلب أكثر من قطعة.');
         return false;
     }
-    if (!governorate) {
-        alert('المحافظة مطلوبة.');
-        return false;
-    }
+    if (!phone) { alert('رقم الهاتف مطلوب.'); return false; }
+    if (!governorate) { alert('المحافظة مطلوبة.'); return false; }
     if (productData.unavailableGovernorates && productData.unavailableGovernorates.includes(governorate)) {
         alert(`عذرًا، لا يتوفر التوصيل إلى محافظة ${governorate}. يرجى اختيار محافظة أخرى.`);
         return false;
     }
-    if (!address) {
-        alert('العنوان بالتفصيل مطلوب.');
-        return false;
-    }
+    if (!address) { alert('العنوان بالتفصيل مطلوب.'); return false; }
     return true;
 }
 
-// Initialize governorate search
+// Governorate search filter
 function initGovernorateSearch() {
     const governorateSearch = document.getElementById('governorate-search');
-    const governorateOptionsList = document.getElementById('governorate-options-list'); // <<< NEW
+    const governorateOptionsList = document.getElementById('governorate-options-list');
 
     governorateSearch.addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
-        const listItems = governorateOptionsList.getElementsByTagName('li'); // <<< Get LI elements
-        for (let i = 0; i < listItems.length; i++) {
-            const listItem = listItems[i];
-            const itemText = listItem.textContent.toLowerCase();
-            if (itemText.includes(searchTerm)) {
-                listItem.style.display = '';
-            } else {
-                listItem.style.display = 'none';
-            }
-        }
+        Array.from(governorateOptionsList.getElementsByTagName('li')).forEach(item => {
+            item.style.display = item.textContent.toLowerCase().includes(searchTerm) ? '' : 'none';
+        });
     });
 }
 
-// Update price based on selections
+// Update price calculation
 function updatePrice() {
-    // Ensure productData is loaded before proceeding
     if (!productData || !productData.flashTypes || !productData.shipping) {
         resetCostDisplay();
         return;
@@ -503,30 +358,21 @@ function updatePrice() {
 
     const flashType = document.getElementById('flash-type').value;
     const quantity = document.getElementById('quantity').value;
-    const governorate = document.getElementById('governorate-input').value; // <<< Get value from the input field
+    const governorate = document.getElementById('governorate-input').value;
     const multipleTypesTextarea = document.getElementById('multiple-types');
 
     const quantityNum = parseInt(quantity);
-    const basePricePerUnit = productData.flashTypes[0].price; // Assuming all flash drives have the same base price
+    const basePricePerUnit = productData.flashTypes[0].price;
     const discountRate = productData.discount || 0;
     const totalPriceBeforeDiscount = basePricePerUnit * quantityNum;
     const totalPriceAfterDiscount = totalPriceBeforeDiscount * (1 - discountRate);
 
     let shippingCost = 0;
-    if (quantityNum < productData.freeShippingThreshold) { 
-        // Check if the selected governorate exists in productData.shipping
-        if (productData.shipping.hasOwnProperty(governorate)) {
-            shippingCost = productData.shipping[governorate];
-        } else {
-            // If governorate is not found (e.g., not yet selected or invalid), set shipping to 0 or a default
-            shippingCost = 0; // Or a default value like 70
-        }
-    } else {
-        shippingCost = 0; // Free shipping
+    if (quantityNum < productData.freeShippingThreshold) {
+        shippingCost = productData.shipping.hasOwnProperty(governorate) ? productData.shipping[governorate] : 0;
     }
 
     const totalCost = totalPriceAfterDiscount + shippingCost;
-
     updateCostDisplay(flashType, quantityNum, totalPriceBeforeDiscount, totalPriceAfterDiscount, shippingCost, totalCost, multipleTypesTextarea.value.trim());
 }
 
@@ -542,14 +388,9 @@ function updateCostDisplay(selectedFlashTypeId, quantityNum, totalPriceBeforeDis
     let selectedItemsText;
     if (quantityNum > 1 && customTypes) {
         selectedItemsText = `${quantityNum} قطعة: ${customTypes}`;
-    } else if (quantityNum > 1) {
-        // If multiple items but no custom types, try to get the name of the selected flash type
-        const selectedType = productData.flashTypes.find(type => type.id === selectedFlashTypeId);
-        const flashTypeName = selectedType ? selectedType.name : 'أنواع متعددة';
-        selectedItemsText = `${quantityNum} قطعة من ${flashTypeName}`;
     } else {
         const selectedType = productData.flashTypes.find(type => type.id === selectedFlashTypeId);
-        const flashTypeName = selectedType ? selectedType.name : 'لم يتم التحديد';
+        const flashTypeName = selectedType ? selectedType.name : (quantityNum > 1 ? 'أنواع متعددة' : 'لم يتم التحديد');
         selectedItemsText = `${quantityNum} قطعة من ${flashTypeName}`;
     }
 
@@ -560,65 +401,30 @@ function updateCostDisplay(selectedFlashTypeId, quantityNum, totalPriceBeforeDis
     document.getElementById('total-cost').textContent = `${totalCost.toFixed(2)} ج.م`;
 }
 
-// Countdown Timer - يبدأ من 12 ظهرًا بتوقيت القاهرة يوم 19 سبتمبر 2025، ويعيد البدء كل 7 أيام
-function initCountdownTimer() {
-    const daysElement = document.getElementById('days');
-    const hoursElement = document.getElementById('hours');
-    const minutesElement = document.getElementById('minutes');
-    const secondsElement = document.getElementById('seconds');
+// Scroll animations
+function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
 
-    // ⚠️ 👇 تاريخ ووقت البداية: 12 ظهرًا بتوقيت القاهرة يوم 19 سبتمبر 2025
-    // 12 PM Cairo = 10:00 AM UTC (لأن توقيت القاهرة UTC+2)
-    const startDate = new Date('2025-09-19T10:00:00Z'); // ← هذا هو التاريخ الثابت الأساسي
-
-    const durationMs = 7 * 24 * 60 * 60 * 1000; // 7 أيام بالمللي ثانية
-
-    const updateCountdown = () => {
-        const now = new Date();
-        const elapsedMs = now.getTime() - startDate.getTime(); // الوقت اللي فات من أول بداية
-
-        // عدد الدورات الكاملة اللي خلصت (كل دورة 7 أيام)
-        const completedCycles = Math.floor(elapsedMs / durationMs);
-
-        // تاريخ نهاية الدورة الحالية (آخر عرض بدأ)
-        const currentCycleEndDate = new Date(startDate.getTime() + (completedCycles + 1) * durationMs);
-
-        let distance = currentCycleEndDate.getTime() - now.getTime();
-
-        // لو فيه خطأ تقريبي صغير، نتأكد أن العداد مايروحش للسالب
-        if (distance < 0) {
-            distance = 0;
-        }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        if (daysElement) daysElement.textContent = String(days).padStart(2, '0');
-        if (hoursElement) hoursElement.textContent = String(hours).padStart(2, '0');
-        if (minutesElement) minutesElement.textContent = String(minutes).padStart(2, '0');
-        if (secondsElement) secondsElement.textContent = String(seconds).padStart(2, '0');
-    };
-
-    // التحديث كل ثانية
-    setInterval(updateCountdown, 1000);
-    updateCountdown(); // تحديث فوري عند تحميل الصفحة
+    document.querySelectorAll('.feature-item, .testimonial').forEach(el => observer.observe(el));
 }
 
-// Add smooth scrolling for anchor links
+// Smooth scrolling
 function initSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: targetElement.offsetTop - 100, behavior: 'smooth' });
             }
         });
     });
